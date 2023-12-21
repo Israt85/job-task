@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import ToDo from "./ToDo";
 import Ongoing from "./Ongoing";
 import Done from "./Done";
+import Swal from "sweetalert2";
 
 const Tasks = () => {
    
@@ -22,7 +23,15 @@ const Tasks = () => {
         }
         axios.post('http://localhost:5000/task', obj)
         .then(res => {
-           console.log(res.data);
+           if(res.data.insertedId){
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Your work has been saved",
+              showConfirmButton: false,
+              timer: 1500
+            });
+           }
         })
         .catch(error => {
            console.error('Error creating task:', error);
@@ -31,7 +40,9 @@ const Tasks = () => {
     }
 
     return (
-        <div className="bg-red flex gap-10">
+        <div>
+          <h2 className="text-white text-xl text-center ">Task Management</h2>
+          <div className="bg-red my-20 flex gap-10">
 <button className="btn" onClick={()=>document.getElementById('my_modal_3').showModal()}>+ Crate New Task</button>
 <dialog id="my_modal_3" className="modal">
   <div className="modal-box h-96 text-black">
@@ -72,6 +83,7 @@ const Tasks = () => {
 <ToDo></ToDo>
 <Ongoing></Ongoing>
 <Done></Done>
+        </div>
         </div>
     );
 };

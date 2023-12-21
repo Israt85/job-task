@@ -1,11 +1,15 @@
 import { useForm } from 'react-hook-form';
 import registerImg from '../../src/assets/sign.jpg'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../Provider/AuthProvider';
+import { FcGoogle } from 'react-icons/fc';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const Register = () => {
-  const {createUser,userProfile} = useContext(AuthContext)
+  const navigate = useNavigate()
+  const {createUser,userProfile,googleLogin} = useContext(AuthContext)
     const {
         register,
         handleSubmit,
@@ -17,8 +21,25 @@ const Register = () => {
         .then(result =>{
           console.log(result.user)
           userProfile(data.name, data.photo)
-          .then(result =>{
-            console.log(result.user);
+          .then(() =>{
+            const userInfo ={
+              name: data.name,
+              email : data.email
+           }
+           axios.post('http://localhost:5000/users', userInfo)
+           .then(res =>{
+            if(res.data.insertedId){
+              console.log('user added');
+              Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "User created succesfully",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+                navigate('/dashboard/tasks')
+          }
+           })
           })
           .catch(error=>{
             console.log(error);
@@ -26,6 +47,22 @@ const Register = () => {
         })
         .catch(error =>{
           console.log(error);
+        })
+      }
+      const handleGoogle=()=>{
+        googleLogin()
+        .then(result =>{
+            console.log(result.user);
+            navigate('/dashboard/tasks')
+            const userInfo ={
+                name: result.user?.displayName,
+                email: result.user?.email
+            }
+            axios.post('http://localhost:5000/users',userInfo)
+            .then(res=>{
+                console.log(res.data);
+                
+            })
         })
       }
     return (
@@ -64,6 +101,10 @@ const Register = () => {
         </div>
         <div className="form-control mt-6">
           <button className="btn btn-outline text-white bg-orange-700">Sign Up</button>
+          <button onClick={handleGoogle} className="btn my-2 btn-outline btn-error">
+            <FcGoogle/>
+  Google Login
+</button>
         </div>
          <p>Already have an account? please <Link className='text-orange-700 font-bold underline' to='/login'>Sign In</Link>. </p>
 

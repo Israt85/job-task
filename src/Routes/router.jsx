@@ -6,6 +6,9 @@ import Login from "../Pages/Login";
 import Dashboard from "../Layout/Dashboard";
 import Tasks from "../Pages/Dashboard/Tasks/Tasks";
 import PreviousTask from "../Pages/Dashboard/PreviousTask/PreviousTask";
+import About from "../Pages/About";
+import Contact from "../Pages/Contact";
+import Blog from "../Pages/Blog";
 
 
 const router = createBrowserRouter([
@@ -16,6 +19,18 @@ const router = createBrowserRouter([
         {
             path: '/',
             element: <Home></Home>
+        },
+        {
+          path: '/about',
+          element: <About></About>
+        },
+        {
+          path: '/contact',
+          element: <Contact></Contact>
+        },
+        {
+          path: '/blog',
+          element: <Blog></Blog>
         }
       ]
     },
