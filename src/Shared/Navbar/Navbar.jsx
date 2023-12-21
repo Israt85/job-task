@@ -1,5 +1,12 @@
+import { useContext } from "react";
+import { AuthContext } from "../../Provider/AuthProvider";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const {user,userlogout} = useContext(AuthContext)
+  const handlelogout = ()=>{
+    userlogout()
+  }
     return (
         <div>
          <div className="navbar bg-orange-700 text-white">
@@ -13,22 +20,24 @@ const Navbar = () => {
     <li>Home</li>
     <li>Home</li>
    </div>
-    <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-        <div className="w-10 rounded-full">
-          <img alt="Tailwind CSS Navbar component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-        </div>
+   {
+    user?  <div className="dropdown dropdown-end">
+    <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+      <div className="w-10 rounded-full">
+        <img alt="Tailwind CSS Navbar component" src={user.photoURL}/>
       </div>
-      <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-        <li>
-          <a className="justify-between">
-            Profile
-          </a>
-        </li>
-        <li><a>Settings</a></li>
-        <li><a>Logout</a></li>
-      </ul>
     </div>
+    <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 text-black rounded-box w-52">
+      <li>
+        <a className="justify-between">
+          Profile
+        </a>
+      </li>
+      <li><Link to='/dashboard'><a>Dashboard</a></Link></li>
+      <li><a onClick={handlelogout}>Logout</a></li>
+    </ul>
+  </div> : ""
+   }
   </div>
 </div>
         </div>
