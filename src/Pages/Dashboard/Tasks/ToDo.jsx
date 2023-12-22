@@ -1,15 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../../Provider/AuthProvider";
+
 
 
 const ToDo = () => {
+    const {user} = useContext(AuthContext)
     const { data: task, refetch } = useQuery({
-        queryKey: ['task'],
+        queryKey: ['task',user?.email],
         queryFn: async () => {
-            const res = await axios.get('http://localhost:5000/task')
+            const res = await axios.get(`http://localhost:5000/task?email=${user.email}`)
             console.log(task);
             return (res.data)
 
@@ -20,9 +24,8 @@ const ToDo = () => {
         handleSubmit,
       } = useForm()
       const onSubmit= (data) => {
-        const taskId = task;
-        console.log('task',task);
-        console.log(taskId); // Replace with the actual task ID
+
+       
 const obj = {
   title: data.title,
   description: data.description,
@@ -30,31 +33,16 @@ const obj = {
   piority: data.piority
 };
 
-axios.put(`http://localhost:5000/task/${taskId}`, obj)
+axios.put(`http://localhost:5000/task/${task._id}`, obj)
   .then(res => {
     console.log(res.data);
   })
   .catch(error => {
     console.error('Error updating task:', error);
   });
-
-        
-        // console.log('data',data)
-        // const obj ={
-        //      title: data.title,
-        //     description : data.description,
-        //     date: data.date,
-        //     piority: data.piority
-        // }
-        // axios.put(`http://localhost:5000/task/${task._id}`, obj)
-        // .then(res => {
-        //    console.log(res.data);
-        // })
-        // .catch(error => {
-        //    console.error('Error creating task:', error);
-        // });
-     
+ 
     }
+    
 
     const handleDelete = (user) => {
         Swal.fire({
@@ -80,15 +68,17 @@ axios.put(`http://localhost:5000/task/${taskId}`, obj)
                     })
             }
         });
-    }
+    }  
     return (
+       
+
         <div className="bg-white w-1/3 h-auto p-4 text-black">
             <h2 className="text-center">TO DO List</h2>
             {
-                task?.map(tas => <div key={tas._id}> <p className="flex justify-between items-center text-xl my-2 p-2 rounded-lg bg-orange-600">{tas.title} <span className="flex items-center"><button onClick={() => handleDelete(tas)}><MdDelete /></button> <button onClick={() => document.getElementById('my_modal_1').showModal()}><MdModeEdit /></button>
+                task?.map((tas) => <div key={tas._id}> <p className="flex justify-between items-center text-xl my-2 p-2 rounded-lg bg-orange-600">{tas.title} <span className="flex items-center"><button onClick={() => handleDelete(tas)}><MdDelete /></button> <button onClick={() => document.getElementById('my_modal_1').showModal()}><MdModeEdit /></button>
                 <dialog id="my_modal_1" className="modal">
                     <div className="modal-box">
-                    <form onSubmit={handleSubmit(onSubmit)} >
+                    <form onSubmit={handleSubmit(() => onSubmit(tas._id))} >
     
     <div>
     <div className="form-control">
@@ -116,7 +106,7 @@ axios.put(`http://localhost:5000/task/${taskId}`, obj)
   </form>
                         <div className="modal-action">
                             <form method="dialog">
-                                {/* if there is a button in form, it will close the modal */}
+                               
                                 <button className="btn">Close</button>
                             </form>
                         </div>
@@ -124,7 +114,7 @@ axios.put(`http://localhost:5000/task/${taskId}`, obj)
                 </dialog>
                </span> </p>  </div>)
             }
-            {/* Open the modal using document.getElementById('ID').showModal() method */}
+            
            
         </div>
     );

@@ -5,8 +5,12 @@ import ToDo from "./ToDo";
 import Ongoing from "./Ongoing";
 import Done from "./Done";
 import Swal from "sweetalert2";
+import { useContext } from "react";
+import { AuthContext } from "../../../Provider/AuthProvider";
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 const Tasks = () => {
+       const {user} = useContext(AuthContext)
    
     const {
         register,
@@ -19,7 +23,8 @@ const Tasks = () => {
              title: data.title,
             description : data.description,
             date: data.date,
-            piority: data.piority
+            piority: data.piority,
+            email: user.email
         }
         axios.post('http://localhost:5000/task', obj)
         .then(res => {
@@ -38,6 +43,28 @@ const Tasks = () => {
         });
      
     }
+    
+    const onDragEnd = (result) => {
+      if (!result.destination) {
+        return;  // Dropped outside the list
+      }
+    
+      const startIndex = result.source.index;
+      const endIndex = result.destination.index;
+    
+      // Clone the tasks array to avoid mutating the state directly
+      const reorderedTasks = [...task];
+    
+      // Reorder tasks in the array
+      const [removed] = reorderedTasks.splice(startIndex, 1);
+      reorderedTasks.splice(endIndex, 0, removed);
+    
+      // Update the order on the server using axios.put
+      // Example: axios.put(`http://localhost:5000/task/reorder`, { tasks: reorderedTasks });
+    
+      // Update the state or trigger a refetch to display the new order
+      // Example: setTask(reorderedTasks) or refetch();
+    };
 
     return (
         <div>
