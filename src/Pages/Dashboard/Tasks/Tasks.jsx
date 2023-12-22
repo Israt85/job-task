@@ -7,7 +7,7 @@ import Done from "./Done";
 import Swal from "sweetalert2";
 import { useContext } from "react";
 import { AuthContext } from "../../../Provider/AuthProvider";
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+
 
 const Tasks = () => {
        const {user} = useContext(AuthContext)
@@ -44,32 +44,11 @@ const Tasks = () => {
      
     }
     
-    const onDragEnd = (result) => {
-      if (!result.destination) {
-        return;  // Dropped outside the list
-      }
     
-      const startIndex = result.source.index;
-      const endIndex = result.destination.index;
-    
-      // Clone the tasks array to avoid mutating the state directly
-      const reorderedTasks = [...task];
-    
-      // Reorder tasks in the array
-      const [removed] = reorderedTasks.splice(startIndex, 1);
-      reorderedTasks.splice(endIndex, 0, removed);
-    
-      // Update the order on the server using axios.put
-      // Example: axios.put(`http://localhost:5000/task/reorder`, { tasks: reorderedTasks });
-    
-      // Update the state or trigger a refetch to display the new order
-      // Example: setTask(reorderedTasks) or refetch();
-    };
-
     return (
         <div>
           <h2 className="text-white text-xl text-center ">Task Management</h2>
-          <div className="bg-red my-20 flex gap-10">
+          <div className="bg-red my-20 flex gap-4">
 <button className="btn" onClick={()=>document.getElementById('my_modal_3').showModal()}>+ Crate New Task</button>
 <dialog id="my_modal_3" className="modal">
   <div className="modal-box h-96 text-black">

@@ -69,13 +69,15 @@ axios.put(`http://localhost:5000/task/${task._id}`, obj)
             }
         });
     }  
+  
     return (
        
 
         <div className="bg-white w-1/3 h-auto p-4 text-black">
             <h2 className="text-center">TO DO List</h2>
             {
-                task?.map((tas) => <div key={tas._id}> <p className="flex justify-between items-center text-xl my-2 p-2 rounded-lg bg-orange-600">{tas.title} <span className="flex items-center"><button onClick={() => handleDelete(tas)}><MdDelete /></button> <button onClick={() => document.getElementById('my_modal_1').showModal()}><MdModeEdit /></button>
+                task?.map((tas) => <div key={tas._id}> <p className="flex justify-between items-center text-xl my-2 p-2 rounded-lg bg-orange-600">{tas.title} <span className="flex items-center"><button onClick={() => handleDelete(tas)}><MdDelete /></button>
+                 <button className="text-sm" onClick={() => document.getElementById('my_modal_1').showModal()}><MdModeEdit /></button>
                 <dialog id="my_modal_1" className="modal">
                     <div className="modal-box">
                     <form onSubmit={handleSubmit(() => onSubmit(tas._id))} >

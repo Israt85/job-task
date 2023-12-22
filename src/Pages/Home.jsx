@@ -1,5 +1,6 @@
 
 import Banner from "../Components/Banner";
+import Footer from "../Components/Footer";
 import NewSec from "./NewSec";
 
 
@@ -9,6 +10,7 @@ const Home = () => {
         <div>
           <Banner></Banner>
           <NewSec></NewSec>
+          <Footer></Footer>
         </div>
     );
 };
